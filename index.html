@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zona Stream MX - Tu Centro de Entretenimiento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome para los íconos de redes sociales -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chosen Palette: Dark Mode with Neon Accents (Deep Blue, Purple, Teal) -->
+    <!-- Application Structure Plan: The SPA uses a thematic, single-page flow starting with a hero section, followed by interactive feature cards, a filterable content gallery, an interactive pricing comparison with a Chart.js visualization, and an FAQ accordion. This structure guides the user from awareness to consideration by showcasing value and answering questions logically, which is more effective for a sales-oriented page than a rigid report structure. -->
+    <!-- Visualization & Content Choices: Pricing Data -> Goal: Compare -> Viz: Interactive pricing cards with calculated monthly cost and a responsive Chart.js bar chart -> Interaction: Visual comparison of monthly costs to highlight savings on long-term plans -> Justification: A bar chart is the clearest way to visually compare discrete numerical values, making the value proposition of longer plans immediately obvious. Content Categories -> Goal: Organize/Inform -> Viz: Filterable grid of generic content cards -> Interaction: JS-powered buttons filter the grid -> Justification: Allows users to explore the breadth of content without being overwhelmed and without infringing on copyrights. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a192f;
+            color: #ccd6f6;
+        }
+        .glass-effect {
+            background: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(45, 212, 191, 0.2);
+        }
+        .highlight-text {
+            color: #64ffda;
+        }
+        .btn-primary {
+            background-color: #64ffda;
+            color: #0a192f;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0a192f;
+            color: #64ffda;
+            box-shadow: 0 0 15px #64ffda;
+        }
+        .btn-secondary {
+            background-color: #a088ff; /* A new, vibrant color for the free trial button */
+            color: #0a192f;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite; /* Adding a subtle pulse animation to make it stand out */
+        }
+        .btn-secondary:hover {
+            background-color: #8162ff;
+            box-shadow: 0 0 15px #a088ff;
+        }
+        .section-title {
+            font-weight: 900;
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        /* Keyframe animation for the pulse effect */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .error-message {
+            background-color: #ef4444;
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        /* New styling for the hero section background image */
+        .hero-section-bg {
+            background-image: linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.9)), url('https://images.unsplash.com/photo-1579546958117-00914902a7b8?q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1920&h=1080&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header / Navigation -->
+    <header class="glass-effect sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Updated Zona Stream MX text with a new color and size -->
+            <div class="text-4xl font-black" style="color: #e50914;">Zona Stream MX</div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#features" class="hover:highlight-text transition-colors">Ventajas</a>
+                <a href="#content" class="hover:highlight-text transition-colors">Contenido</a>
+                <a href="#pricing" class="hover:highlight-text transition-colors">Planes</a>
+                <a href="#faq" class="hover:highlight-text transition-colors">Preguntas</a>
+            </div>
+            <!-- Updated the "¡Lo Quiero!" button to link to WhatsApp -->
+            <a href="https://wa.me/525664142760?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20planes." target="_blank" class="btn-primary font-bold py-2 px-4 rounded-lg">¡Lo Quiero!</a>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Hero Section -->
+        <section id="hero" class="text-center py-20 hero-section-bg">
+            <h1 class="text-4xl md:text-6xl font-black leading-tight mb-4">
+                Todo tu entretenimiento. <br> <span class="highlight-text">Un solo lugar.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto mb-8">
+                Olvídate de cambiar entre aplicaciones y pagar múltiples suscripciones. Accede a TV en vivo, los mejores eventos, películas de estreno y tus series favoritas con un solo servicio.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <!-- Updated the "¡Lo Quiero!" button to link to WhatsApp -->
+                <a href="https://wa.me/525664142760?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20planes." target="_blank" class="btn-primary text-lg font-bold py-3 px-8 rounded-lg">¡Lo Quiero!</a>
+                <!-- Updated button to link to WhatsApp -->
+                <a href="https://wa.me/525664142760?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n%20sobre%20la%20prueba%20gratuita." target="_blank" class="btn-secondary text-lg font-bold py-3 px-8 rounded-lg">Prueba totalmente gratis</a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-20">
+            <h2 class="section-title text-center mb-12">¿Por qué elegir Zona Stream MX?</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div class="glass-effect p-8 rounded-lg transform hover:scale-105 transition-transform">
+                    <div class="text-5xl mb-4 highlight-text">📺</div>
+                    <h3 class="text-2xl font-bold mb-2">TV en Vivo y Eventos</h3>
+                    <p class="text-slate-400">Canales nacionales e internacionales, deportes, noticias y los eventos de Pago Por Ver (PPV) más esperados, todo en tiempo real.</p>
+                </div>
+                <div class="glass-effect p-8 rounded-lg transform hover:scale-105 transition-transform">
+                    <div class="text-5xl mb-4 highlight-text">🎬</div>
+                    <h3 class="text-2xl font-bold mb-2">Películas Ilimitadas</h3>
+                    <p class="text-slate-400">Desde los clásicos del cine hasta los estrenos más recientes. Un catálogo que se actualiza constantemente para que nunca te quedes sin algo que ver.</p>
+                </div>
+                <div class="glass-effect p-8 rounded-lg transform hover:scale-105 transition-transform">
+                    <div class="text-5xl mb-4 highlight-text">🍿</div>
+                    <h3 class="text-2xl font-bold mb-2">Todas las Series</h3>
+                    <p class="text-slate-400">Maratonea las series que todos están comentando. Drama, comedia, anime y producciones originales de las plataformas más populares.</p>
+                </div>
+                 <div class="glass-effect p-8 rounded-lg transform hover:scale-105 transition-transform">
+                    <div class="text-5xl mb-4 highlight-text">👨‍👩‍👧‍👦</div>
+                    <h3 class="text-2xl font-bold mb-2">Multiplataforma y Familiar</h3>
+                    <p class="text-slate-400">Instala en hasta 10 dispositivos y disfruta de 3 conexiones simultáneas, ideal para toda la familia.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Showcase Section -->
+        <section id="content" class="py-20">
+            <h2 class="section-title text-center mb-4">Un Universo de Contenido te Espera</h2>
+            <p class="text-center text-slate-400 max-w-2xl mx-auto mb-8">No te pierdas de nada. Nuestro servicio integra el contenido más popular para que siempre tengas la mejor opción al alcance de tu mano. Explora algunas de las categorías que incluimos.</p>
+            <div class="flex justify-center space-x-2 md:space-x-4 mb-8" id="filter-buttons">
+                <button class="btn-filter active btn-primary font-bold py-2 px-4 rounded-lg" data-filter="all">Todo</button>
+                <button class="btn-filter btn-primary font-bold py-2 px-4 rounded-lg" data-filter="movies">Películas</button>
+                <button class="btn-filter btn-primary font-bold py-2 px-4 rounded-lg" data-filter="series">Series</button>
+                <button class="btn-filter btn-primary font-bold py-2 px-4 rounded-lg" data-filter="live">En Vivo</button>
+                <button class="btn-filter btn-primary font-bold py-2 px-4 rounded-lg" data-filter="anime">Anime</button>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4" id="content-grid">
+                <!-- Content items will be injected by JS -->
+            </div>
+        </section>
+
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-20">
+            <h2 class="section-title text-center mb-12">Planes Flexibles para Ti</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                <!-- Plan 1 Mes -->
+                <div class="glass-effect p-8 rounded-lg border-2 border-slate-700 text-center">
+                    <h3 class="text-2xl font-bold mb-2">1 Mes</h3>
+                    <p class="text-5xl font-black mb-4 highlight-text">$150</p>
+                    <p class="text-slate-400 mb-6">Acceso completo. Ideal para probar el servicio.</p>
+                    <a href="#" class="btn-primary font-bold py-3 px-6 rounded-lg w-full block">Seleccionar</a>
+                </div>
+                <!-- Plan 3 Meses -->
+                <div class="glass-effect p-8 rounded-lg border-2 border-slate-700 text-center">
+                    <h3 class="text-2xl font-bold mb-2">3 Meses</h3>
+                    <p class="text-5xl font-black mb-2 highlight-text">$400</p>
+                    <p class="font-bold text-slate-300 mb-4">Ahorras $50</p>
+                    <p class="text-slate-400 mb-6">Compromiso a corto plazo con un buen descuento.</p>
+                    <a href="#" class="btn-primary font-bold py-3 px-6 rounded-lg w-full block">Seleccionar</a>
+                </div>
+                <!-- Plan 6 Meses -->
+                <div class="glass-effect p-8 rounded-lg border-2 border-slate-700 text-center">
+                    <h3 class="text-2xl font-bold mb-2">6 Meses</h3>
+                    <p class="text-5xl font-black mb-2 highlight-text">$700</p>
+                    <p class="font-bold text-slate-300 mb-4">Ahorras $200</p>
+                    <p class="text-slate-400 mb-6">La opción popular para un entretenimiento continuo.</p>
+                    <a href="#" class="btn-primary font-bold py-3 px-6 rounded-lg w-full block">Seleccionar</a>
+                </div>
+                <!-- Plan 12 Meses -->
+                <div class="glass-effect p-8 rounded-lg border-2 border-teal-400 text-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-teal-400 text-slate-900 font-bold text-xs py-1 px-3 transform translate-x-8 translate-y-4 rotate-45">MEJOR VALOR</div>
+                    <h3 class="text-2xl font-bold mb-2">12 Meses</h3>
+                    <p class="text-5xl font-black mb-2 highlight-text">$1400</p>
+                    <p class="font-bold text-slate-300 mb-4">¡Ahorras $400!</p>
+                    <p class="text-slate-400 mb-6">El plan definitivo. Un año completo de entretenimiento al mejor precio.</p>
+                    <a href="#" class="btn-primary font-bold py-3 px-6 rounded-lg w-full block">Seleccionar</a>
+                </div>
+            </div>
+            <h3 class="text-2xl font-bold text-center mb-8">Comparación de Costo Mensual</h3>
+            <div id="errorPricing" class="hidden error-message"></div>
+            <div class="chart-container glass-effect p-4 rounded-lg mb-12">
+                <canvas id="pricingChart"></canvas>
+            </div>
+
+            <h3 class="text-2xl font-bold text-center mb-8">El Valor de Zona Stream MX</h3>
+            <p class="text-center text-slate-400 max-w-2xl mx-auto mb-8">Al adquirir un plan anual, no solo obtienes un precio inmejorable, sino que también reemplazas la necesidad de múltiples suscripciones individuales, generando un ahorro significativo como se muestra en la siguiente comparación.</p>
+            <div id="errorComparison" class="hidden error-message"></div>
+            <div class="chart-container glass-effect p-4 rounded-lg">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="py-20 max-w-4xl mx-auto">
+            <h2 class="section-title text-center mb-12">Preguntas Frecuentes</h2>
+            <div class="space-y-4" id="faq-container">
+                <!-- FAQ items will be injected by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-slate-800">
+        <div class="container mx-auto px-6 py-8 md:py-12 text-center text-slate-400">
+            <p class="mb-4 text-sm md:text-base">&copy; 2025 Zona Stream MX. Todos los derechos reservados.</p>
+            <div class="flex justify-center space-x-6 md:space-x-8 mt-4 md:mt-6">
+                <!-- Updated the Facebook link -->
+                <a href="https://www.facebook.com/ZonaStreamMx/" target="_blank" class="text-3xl md:text-4xl text-blue-600 hover:text-white transition-colors">
+                    <i class="fab fa-facebook-square"></i>
+                </a>
+                <a href="https://wa.me/525664142760" target="_blank" class="text-3xl md:text-4xl text-green-500 hover:text-white transition-colors">
+                    <i class="fab fa-whatsapp-square"></i>
+                </a>
+            </div>
+            <p class="mt-4 text-sm md:text-base">Contáctanos directamente: +52 56 6414 2760</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contentData = [
+                { category: 'movies', title: 'Éxitos de Taquilla' },
+                { category: 'series', title: 'Series Aclamadas' },
+                { category: 'live', title: 'Deportes en Vivo' },
+                { category: 'anime', title: 'Clásicos del Anime' },
+                { category: 'movies', title: 'Cine de Autor' },
+                { category: 'series', title: 'Documentales Impactantes' },
+                { category: 'live', title: 'Noticias 24/7' },
+                { category: 'series', title: 'Comedias para Reír' },
+                { category: 'movies', title: 'Películas Familiares' },
+                { category: 'anime', title: 'Nuevos Animes' },
+                { category: 'live', title: 'Canales de Música' },
+                { category: 'series', title: 'Dramas Intensos' },
+                { category: 'movies', title: 'Terror y Suspenso' },
+                { category: 'live', title: 'Eventos Especiales' },
+                { category: 'series', 'title': 'Ciencia Ficción' },
+            ];
+
+            const contentGrid = document.getElementById('content-grid');
+            contentData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `content-card p-4 rounded-lg text-white font-bold text-center flex items-center justify-center h-24 md:h-32 transform hover:scale-105 transition-transform cursor-pointer ${item.category}`;
+                card.textContent = item.title;
+                card.style.background = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(https://placehold.co/400x300/0a192f/64ffda?text=${encodeURIComponent(item.title.substring(0,1))})`;
+                card.style.backgroundSize = 'cover';
+                card.style.backgroundPosition = 'center';
+                contentGrid.appendChild(card);
+            });
+
+            const filterButtons = document.querySelectorAll('.btn-filter');
+            const contentCards = document.querySelectorAll('.content-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    const filter = button.dataset.filter;
+                    
+                    contentCards.forEach(card => {
+                        if (filter === 'all' || card.classList.contains(filter)) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            try {
+                const ctx = document.getElementById('pricingChart').getContext('2d');
+                const pricingChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['1 Mes', '3 Meses', '6 Meses', '12 Meses'],
+                        datasets: [{
+                            label: 'Costo Mensual (MXN)',
+                            data: [150, 400 / 3, 700 / 6, 1400 / 12],
+                            backgroundColor: [
+                                'rgba(100, 255, 218, 0.2)',
+                                'rgba(100, 255, 218, 0.4)',
+                                'rgba(100, 255, 218, 0.6)',
+                                'rgba(100, 255, 218, 0.8)'
+                            ],
+                            borderColor: '#64ffda',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(204, 214, 246, 0.1)'
+                                },
+                                ticks: {
+                                    color: '#ccd6f6',
+                                    callback: function(value) {
+                                        return '$' + value.toFixed(2);
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: '#ccd6f6'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(context.parsed.y);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error al crear el gráfico de precios:", error);
+                document.getElementById('errorPricing').classList.remove('hidden');
+                document.getElementById('errorPricing').textContent = `Error al cargar el gráfico de precios: ${error.message}`;
+            }
+
+            try {
+                const ctxComparison = document.getElementById('comparisonChart').getContext('2d');
+                const comparisonChart = new Chart(ctxComparison, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Zona Stream MX (anual)', 'Netflix Estándar', 'Disney+ Estándar'],
+                        datasets: [{
+                            label: 'Costo Mensual Aproximado',
+                            data: [1400 / 12, 219, 159],
+                            backgroundColor: [
+                                'rgba(100, 255, 218, 0.8)',
+                                'rgba(255, 99, 132, 0.8)',
+                                'rgba(54, 162, 235, 0.8)'
+                            ],
+                            borderColor: [
+                                '#64ffda',
+                                '#FF6384',
+                                '#36A2EB'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(204, 214, 246, 0.1)'
+                                },
+                                ticks: {
+                                    color: '#ccd6f6',
+                                    callback: function(value) {
+                                        return '$' + value.toFixed(2);
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: '#ccd6f6'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(context.parsed.y);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error al crear el gráfico de comparación:", error);
+                document.getElementById('errorComparison').classList.remove('hidden');
+                document.getElementById('errorComparison').textContent = `Error al cargar el gráfico de comparación: ${error.message}`;
+            }
+
+            const faqData = [
+                { q: '¿En qué dispositivos funciona?', a: 'Nuestro servicio es compatible con la mayoría de Smart TVs, dispositivos Android, iOS, computadoras (Windows/Mac) y más. ¡Pregúntanos por tu dispositivo específico!' },
+                { q: '¿Necesito una VPN?', a: 'No es necesaria una VPN para utilizar nuestro servicio dentro de México. Funciona directamente con tu conexión a internet.' },
+                { q: '¿Qué velocidad de internet necesito?', a: 'Recomendamos una conexión estable de al menos 20 Mbps para una experiencia fluida en alta definición, especialmente para contenido en vivo y 4K.' },
+                { q: '¿Cómo es el proceso de activación?', a: 'Es muy sencillo. Una vez realizado tu pago, te enviamos tus credenciales de acceso y una guía de instalación simple para que puedas empezar a disfrutar del servicio en minutos.' },
+                { q: '¿Puedo cancelar en cualquier momento?', a: 'Sí, nuestros planes no tienen contratos forzosos. Simplemente dejas de renovar tu suscripción cuando lo desees.' }
+            ];
+
+            const faqContainer = document.getElementById('faq-container');
+            faqData.forEach((item, index) => {
+                const faqItem = document.createElement('div');
+                faqItem.className = 'glass-effect rounded-lg';
+                faqItem.innerHTML = `
+                    <button class="faq-question w-full text-left p-4 flex justify-between items-center font-bold text-lg">
+                        <span>${item.q}</span>
+                        <span class="faq-icon transform transition-transform">+</span>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+                        <p class="p-4 pt-0 text-slate-400">${item.a}</p>
+                    </div>
+                `;
+                faqContainer.appendChild(faqItem);
+            });
+
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling;
+                    const icon = question.querySelector('.faq-icon');
+
+                    if (answer.style.maxHeight && answer.style.maxHeight !== '0px') {
+                        answer.style.maxHeight = '0px';
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        answer.style.maxHeight = answer.scrollHeight + 'px';
+                        icon.style.transform = 'rotate(45deg)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

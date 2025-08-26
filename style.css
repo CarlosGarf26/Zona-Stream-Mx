@@ -1,0 +1,175 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0a192f;
+    color: #ccd6f6;
+    /* Suaviza el desplazamiento de la página */
+    scroll-behavior: smooth; 
+}
+
+/* Efecto de "cristal" para contenedores */
+.glass-effect {
+    background: rgba(10, 25, 47, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(45, 212, 191, 0.2);
+}
+
+/* Texto de acento */
+.highlight-text {
+    color: #64ffda;
+}
+
+/* Títulos de sección */
+.section-title {
+    font-weight: 900;
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+}
+
+/* ==================================== */
+/* Botones y Hero            */
+/* ==================================== */
+
+/* Botón principal */
+.btn-primary {
+    background-color: #64ffda;
+    color: #0a192f;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0a192f;
+    color: #64ffda;
+    box-shadow: 0 0 15px #64ffda;
+}
+
+/* Botón secundario */
+.btn-secondary {
+    background-color: #a088ff;
+    color: #0a192f;
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.btn-secondary:hover {
+    background-color: #8162ff;
+    box-shadow: 0 0 15px #a088ff;
+}
+
+/* Animación de pulso para el botón secundario */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Fondo de la sección Hero */
+.hero-section-bg {
+    background-image: linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.9)), url('https://images.unsplash.com/photo-1579546958117-00914902a7b8?q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1920&h=1080&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Mensajes de error (ocultos por defecto) */
+.error-message {
+    background-color: #ef4444;
+    color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* ==================================== */
+/* Gráficos y Contenido        */
+/* ==================================== */
+
+/* Contenedor de gráficos */
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 40vh;
+    max-height: 400px;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        height: 350px;
+    }
+}
+
+/* Estilo para las tarjetas de contenido */
+.content-card {
+    background: rgba(10, 25, 47, 0.85); /* Fondo semitransparente para el efecto glass */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(45, 212, 191, 0.2);
+    /* El resto de los estilos se aplican a través de JavaScript para incluir la imagen de fondo */
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24vh;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 0.5rem;
+}
+
+/* Efecto hover en las tarjetas de contenido */
+.content-card:hover {
+    transform: scale(1.05);
+}
+
+/* Estilos para el botón de filtro activo */
+.btn-filter.active {
+    background-color: #64ffda; /* Color de acento */
+    color: #0a192f;
+    box-shadow: 0 0 15px #64ffda;
+}
+
+/* ==================================== */
+/* FAQ                   */
+/* ==================================== */
+
+/* Estilos de la sección FAQ */
+.faq-question {
+    /* Estilos ya definidos en el HTML */
+    font-weight: bold;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+}
+
+.faq-answer {
+    /* Estilos de transición ya definidos en el HTML */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.faq-icon {
+    /* Estilos de transición para el icono */
+    transform: rotate(0deg);
+    transition: transform 0.5s ease;
+}
+
+/* Rotación del icono al expandir la respuesta */
+.faq-answer.active + .faq-icon {
+    transform: rotate(45deg);
+}
+
+
+.footer {
+    background-color: #0f172a;
+    border-top: 1px solid #1e293b;
+}
+
